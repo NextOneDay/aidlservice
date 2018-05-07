@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import java.util.ArrayList;
+
 /**
  * Created by nextonedaygg on 2018/5/6.
  */
@@ -14,20 +16,23 @@ public class HDMService {
 
     private ContentResolver mResolver;
     private Uri mUri;
+    private ArrayList<HDMObserver> mMal;
 
     public void getInstance(Context context){
 
         mResolver = context.getContentResolver();
         mUri = Uri.parse("");
+        mMal = new ArrayList<>();
+
 
     }
 
     public void  registerObserver(HDMObserver observer){
-
+        mMal.add(observer);
     }
 
     public void unRegisterOberver(HDMObserver observer){
-
+        mMal.remove(observer);
     }
 
     public void DHMIntSet(String key,int value) throws  Exception{
@@ -41,10 +46,12 @@ public class HDMService {
     public void DHMStrGet(String key) throws  Exception{
 
         Cursor query = mResolver.query(mUri, new String[]{"key,value"}, null, new String[]{key}, null);
-        while (query!=null && query.moveToNext()){
+        if (query!=null && query.moveToNext()){
             query.getString(0); //拿到key的值
             query.getString(1); // 拿到value的值
         }
+        query.close();
+
     }
 
 

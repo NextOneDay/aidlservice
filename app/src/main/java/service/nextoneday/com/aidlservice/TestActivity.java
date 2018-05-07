@@ -131,6 +131,27 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+
+    @Override
+    protected void onDestroy() {
+        mContentResolver.unregisterContentObserver(mObserver);
+
+        super.onDestroy();
+        if (mRemoteBookManager != null && mRemoteBookManager.asBinder().isBinderAlive()) {
+            try {
+                Log.d(TAG, "unregister listener" + mOnNewBookArrivedListener);
+                mRemoteBookManager.unregisterListener(mOnNewBookArrivedListener);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+//            unbindService(mConnection);
+        }
+    }
+
+
+
+
     private void observer() {
         mObserver = new HMLContentObserver(mHandler);
         mContentResolver = getContentResolver();
@@ -152,22 +173,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
             Log.d(TAG,"插入数据更新通知");
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        mContentResolver.unregisterContentObserver(mObserver);
-
-        super.onDestroy();
-        if (mRemoteBookManager != null && mRemoteBookManager.asBinder().isBinderAlive()) {
-            try {
-                Log.d(TAG, "unregister listener" + mOnNewBookArrivedListener);
-                mRemoteBookManager.unregisterListener(mOnNewBookArrivedListener);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-//            unbindService(mConnection);
         }
     }
 }
