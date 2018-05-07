@@ -97,7 +97,6 @@ public class VarTableOpenDao {
 //		Cursor cursor = db.rawQuery(sql, null);
 
         Cursor cursor = db.query("students", new String[]{"_id","name","sex"}, null, null, null, null, null);
-        cursor.requery()
         while(cursor.moveToNext()){
 
             //  获得对应的这一行的数据

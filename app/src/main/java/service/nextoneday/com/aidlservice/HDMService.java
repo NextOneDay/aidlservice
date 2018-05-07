@@ -3,6 +3,7 @@ package service.nextoneday.com.aidlservice;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 
 /**
@@ -39,7 +40,11 @@ public class HDMService {
 
     public void DHMStrGet(String key) throws  Exception{
 
-        mResolver.query(mUri,new String[]{"key"},null,new String[]{key},null);
+        Cursor query = mResolver.query(mUri, new String[]{"key,value"}, null, new String[]{key}, null);
+        while (query!=null && query.moveToNext()){
+            query.getString(0); //拿到key的值
+            query.getString(1); // 拿到value的值
+        }
     }
 
 

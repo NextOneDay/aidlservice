@@ -33,6 +33,7 @@ public class HDMContentProvide extends ContentProvider {
     }
 
     private DBHelper mDbHelper;
+    private MyOpenHelper mMyOpenHelper;
 
 
     private String getTableName(Uri uri){
@@ -55,14 +56,21 @@ public class HDMContentProvide extends ContentProvider {
     public boolean onCreate() {
 
         mDbHelper = new DBHelper(getContext());
+        mMyOpenHelper = new MyOpenHelper(getContext());
         return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+
+        String tableName = getTableName(uri);
+        if(tableName==null){
+            throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
         mDbHelper.query(uri,projection,selection,selectionArgs,sortOrder);
-      return null;
+        return  mMyOpenHelper.getReadableDatabase().query(tableName,projection,selection,selectionArgs,null,null,sortOrder);
+
     }
 
     /**
@@ -79,7 +87,12 @@ public class HDMContentProvide extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+        String tableName = getTableName(uri);
+        if(tableName==null){
+            throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
         mDbHelper.insert(uri,values);
+        mMyOpenHelper.getWritableDatabase().insert(tableName,null,values);
         getContext().getContentResolver().notifyChange(uri,null);
 
         return uri;
@@ -87,12 +100,31 @@ public class HDMContentProvide extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+
+        String tableName = getTableName(uri);
+        if(tableName==null){
+            throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
         mDbHelper.delete(uri,selection,selectionArgs);
-        return 0;
+        int count = mMyOpenHelper.getWritableDatabase().delete(tableName, selection, selectionArgs);
+        if(count>0){
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+        return count;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        String tableName = getTableName(uri);
+        if(tableName==null){
+            throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+
+        int update = mMyOpenHelper.getWritableDatabase().update(tableName, values, selection, selectionArgs);
+        if(update>0){
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+
+        return update;
     }
 }

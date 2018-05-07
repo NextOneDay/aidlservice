@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by nextonedaygg on 2018/5/6.
  */
 
-public class MyOpenHelper extends SQLiteOpenHelper {
+public class  MyOpenHelper extends SQLiteOpenHelper {
     public MyOpenHelper(Context context) {
         super(context, "bank.db", null, 1);
     }
