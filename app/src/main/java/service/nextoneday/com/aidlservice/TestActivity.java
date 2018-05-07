@@ -45,10 +45,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View btnStart = findViewById(R.id.btn_start);
-        View btnProvider = findViewById(R.id.btn_provide);
-        btnProvider.setOnClickListener(this);
-        btnStart.setOnClickListener(this);
         mUri = Uri.parse("content://service.nextoneday.com.aidlservice.hmd.provider/vartable");
         observer();
 
@@ -100,14 +96,12 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_provide:
+
                 queryContent();
-                break;
-            case R.id.btn_start:
+
                 start();
-                break;
-        }
+
+
     }
 
     private void queryContent() {

@@ -4,15 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 
-import org.greenrobot.greendao.annotation.Id;
-
-import java.util.List;
-
-import service.nextoneday.com.aidlservice.HMD.DaoMaster;
-import service.nextoneday.com.aidlservice.HMD.DaoSession;
-import service.nextoneday.com.aidlservice.HMD.LogTableDao;
-import service.nextoneday.com.aidlservice.HMD.VarTable;
-import service.nextoneday.com.aidlservice.HMD.VarTableDao;
+import service.nextoneday.com.aidlservice.DHM.DaoMaster;
+import service.nextoneday.com.aidlservice.DHM.DaoSession;
+import service.nextoneday.com.aidlservice.DHM.VarTable;
+import service.nextoneday.com.aidlservice.DHM.VarTableDao;
 
 /**
  * Created by nextonedaygg on 2018/5/5.
@@ -36,19 +31,14 @@ public class DBHelper {
 
     }
 
-    public LogTableDao getLogTabDao() {
-        return mDaoSession.getLogTableDao();
+    public VarTableDao getLogTabDao() {
+        return mDaoSession.getVarTableDao();
     }
 
 
 
     public void insert(Uri uri, ContentValues values) {
-        VarTable table = new VarTable();
-        table.setKey(values.getAsString("key"));
-        table.setValue(values.getAsString("value"));
-        table.setTime(values.getAsLong("time"));
-        table.setPackageName(values.getAsString("packageName"));
-        getVarTableDao().insert(table);
+     
 
     }
 
@@ -65,6 +55,5 @@ public class DBHelper {
      */
     public void delete(Uri uri, String selection, String[] selectionArgs) {
 
-        getVarTableDao().delete();
     }
 }

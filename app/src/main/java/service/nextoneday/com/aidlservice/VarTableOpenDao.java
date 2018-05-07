@@ -1,10 +1,12 @@
-package service.nextoneday.com.aidlservice.HMD;
+package service.nextoneday.com.aidlservice;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+
+import service.nextoneday.com.aidlservice.MyOpenHelper;
 
 /**
  * Created by nextonedaygg on 2018/5/6.

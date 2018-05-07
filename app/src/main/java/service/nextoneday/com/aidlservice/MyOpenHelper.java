@@ -1,4 +1,4 @@
-package service.nextoneday.com.aidlservice.HMD;
+package service.nextoneday.com.aidlservice;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

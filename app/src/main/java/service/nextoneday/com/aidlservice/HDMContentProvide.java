@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import service.nextoneday.com.aidlservice.HMD.VarTableOpenDao;
-
 import static java.util.Calendar.getInstance;
 
 
@@ -35,6 +33,7 @@ public class HDMContentProvide extends ContentProvider {
     }
 
     private DBHelper mDbHelper;
+
 
     private String getTableName(Uri uri){
         String tableName =null;
@@ -81,7 +80,6 @@ public class HDMContentProvide extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         mDbHelper.insert(uri,values);
-        new VarTableOpenDao(getContext()).insert()
         getContext().getContentResolver().notifyChange(uri,null);
 
         return uri;
