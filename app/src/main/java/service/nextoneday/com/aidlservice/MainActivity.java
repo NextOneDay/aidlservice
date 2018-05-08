@@ -7,13 +7,14 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Uri mUri;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +32,34 @@ public class MainActivity extends AppCompatActivity {
 
         getContentResolver().insert(mUri,values);
 
-
+        observer();
     }
 
+    private Uri mUri;
+    private ContentResolver mContentResolver;
+    private HMLContentObserver mObserver;
+    private void observer() {
+        mObserver = new HMLContentObserver(null);
+        mContentResolver = getContentResolver();
+        mContentResolver.registerContentObserver(mUri, true, mObserver);
+    }
+
+    private  class HMLContentObserver extends  ContentObserver{
+
+        /**
+         * Creates a content observer.
+         *
+         * @param handler The handler to run {@link #onChange} on, or null if none.
+         */
+        public HMLContentObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            Log.d(TAG,"插入数据更新通知");
+        }
+    }
 
 }

@@ -3,10 +3,16 @@ package service.nextoneday.com.aidlservice;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Created by nextonedaygg on 2018/5/6.
@@ -16,20 +22,49 @@ public class HDMService {
 
     private ContentResolver mResolver;
     private Uri mUri;
-    private ArrayList<HDMObserver> mMal;
+    private HashMap<String,HDMObserver> mMal;
+    private HMLContentObserver mObserver;
+    private ArrayList<String> mMal1;
 
     public void getInstance(Context context){
 
         mResolver = context.getContentResolver();
         mUri = Uri.parse("");
-        mMal = new ArrayList<>();
+        mMal = new HashMap<>();
 
 
     }
 
     public void  registerObserver(HDMObserver observer){
-        mMal.add(observer);
+        mMal.put("uri",observer);
+        String[] keys = observer.keys;
+        mMal1 = (ArrayList<String>) Arrays.asList(keys);
+
+        mObserver = new HMLContentObserver(null);
+        mResolver.registerContentObserver(mUri, true, mObserver);
     }
+
+    private  class HMLContentObserver extends ContentObserver {
+
+        /**
+         * Creates a content observer.
+         *
+         * @param handler The handler to run {@link #onChange} on, or null if none.
+         */
+        public HMLContentObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+            HDMObserver hdmObserver = mMal.get(uri);
+            hdmObserver.update("key","value");
+        }
+    }
+
+
+
 
     public void unRegisterOberver(HDMObserver observer){
         mMal.remove(observer);

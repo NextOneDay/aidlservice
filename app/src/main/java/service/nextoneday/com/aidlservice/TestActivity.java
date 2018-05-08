@@ -38,15 +38,14 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
     private Uri mUri;
-    private ContentResolver mContentResolver;
-    private HMLContentObserver mObserver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mUri = Uri.parse("content://service.nextoneday.com.aidlservice.hmd.provider/vartable");
-        observer();
+       
 
     }
 
@@ -135,7 +134,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        mContentResolver.unregisterContentObserver(mObserver);
 
         super.onDestroy();
         if (mRemoteBookManager != null && mRemoteBookManager.asBinder().isBinderAlive()) {
@@ -152,27 +150,5 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    private void observer() {
-        mObserver = new HMLContentObserver(mHandler);
-        mContentResolver = getContentResolver();
-        mContentResolver.registerContentObserver(mUri, true, mObserver);
-    }
-
-    private  class HMLContentObserver extends  ContentObserver{
-
-        /**
-         * Creates a content observer.
-         *
-         * @param handler The handler to run {@link #onChange} on, or null if none.
-         */
-        public HMLContentObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            Log.d(TAG,"插入数据更新通知");
-        }
-    }
+    
 }
